@@ -10,4 +10,5 @@ cli-приложение для поиска отличий в файлах yaml
 Setting "common.setting2" deleted.
 Setting "common.setting4" added with value "blah blah".
 Setting "group1.baz" changed from "bas" to "bars".
-Section "group2" deleted.```
+Section "group2" deleted.
+```
