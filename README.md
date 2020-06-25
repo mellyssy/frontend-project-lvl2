@@ -1,4 +1,4 @@
-[![Maintainability](https://api.codeclimate.com/v1/badges/b155d4bcab7d10b424fd/maintainability)](https://codeclimate.com/github/mellyssy/frontend-project-lvl2/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/b155d4bcab7d10b424fd/test_coverage)](https://codeclimate.com/github/mellyssy/frontend-project-lvl2/test_coverage)
+![Setup and run](https://github.com/mellyssy/frontend-project-lvl2/workflows/Setup%20and%20run/badge.svg) [![Maintainability](https://api.codeclimate.com/v1/badges/b155d4bcab7d10b424fd/maintainability)](https://codeclimate.com/github/mellyssy/frontend-project-lvl2/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/b155d4bcab7d10b424fd/test_coverage)](https://codeclimate.com/github/mellyssy/frontend-project-lvl2/test_coverage)
 
 # Вычислитель отличий
 
