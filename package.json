@@ -4,7 +4,7 @@
   "description": "cli-app to find differences between files in json, yaml and ini formats",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx -n --experimental-vm-modules jest"
   },
   "type": "module",
   "repository": {
@@ -27,7 +27,9 @@
   "homepage": "https://github.com/mellyssy/frontend-project-lvl2#readme",
   "devDependencies": {
     "eslint-config-airbnb-base": "^14.1.0",
-    "eslint-plugin-import": "^2.20.2"
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jest": "^23.17.1",
+    "jest": "^26.1.0"
   },
   "dependencies": {
     "commander": "^5.1.0",
