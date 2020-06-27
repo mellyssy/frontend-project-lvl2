@@ -32,6 +32,7 @@
     "jest": "^26.1.0"
   },
   "dependencies": {
+    "@jest/globals": "^26.1.0",
     "commander": "^5.1.0",
     "eslint": "^6.8.0",
     "lodash": "^4.17.15"
