@@ -8,9 +8,15 @@ cli-приложение для поиска отличий в файлах yaml
 
 Пример использования:
 
-```$ gendiff --format plain first-config.ini second-config.ini
-Setting "common.setting2" deleted.
-Setting "common.setting4" added with value "blah blah".
-Setting "group1.baz" changed from "bas" to "bars".
-Section "group2" deleted.
+```
+$ gendiff before.yml after.yml
+
+{
+  host: hexlet.io
+- timeout: 50
++ timeout: 20
+- proxy: 123.234.53.22
+- follow: false
++ verbose: true
+}
 ```
