@@ -4,9 +4,7 @@ import gendiff from '../src/index.js';
 
 const getFixturePath = (filename) => path.join('__fixtures__', filename);
 
-
-test('plain JSON check', () => {
-  const answer = `{
+const answer = `{
   host: hexlet.io
 - timeout: 50
 + timeout: 20
@@ -15,5 +13,10 @@ test('plain JSON check', () => {
 + verbose: true
 }`;
 
+test('plain JSON check', () => {
   expect(gendiff(getFixturePath('before.json'), getFixturePath('after.json'))).toBe(answer);
+});
+
+test('plain YAML check', () => {
+  expect(gendiff(getFixturePath('before.yml'), getFixturePath('after.yml'))).toBe(answer);
 });
