@@ -2,7 +2,7 @@ import _ from 'lodash';
 import parseData from './parsers/parsers';
 
 const gendiff = (pathToFile1, pathToFile2) => {
-  const [before, after] = parseData(pathToFile1, pathToFile2);
+  const [before, after] = [parseData(pathToFile1), parseData(pathToFile2)];
 
   const keys = _.union(Object.keys(before), Object.keys(after));
 

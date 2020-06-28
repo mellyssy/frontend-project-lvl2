@@ -2,22 +2,16 @@ import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
 
-const parseData = (pathToFile1, pathToFile2) => {
-  const extension = path.extname(pathToFile1);
-  let before;
-  let after;
+const parseData = (filePath) => {
+  const extension = path.extname(filePath);
+  const file = fs.readFileSync(filePath);
   switch (extension) {
     case '.json':
-      before = JSON.parse(fs.readFileSync(pathToFile1));
-      after = JSON.parse(fs.readFileSync(pathToFile2));
-      return [before, after];
+      return JSON.parse(file);
     case '.yml':
-      before = yaml.safeLoad(fs.readFileSync(pathToFile1));
-      after = yaml.safeLoad(fs.readFileSync(pathToFile2));
-      return [before, after];
+      return yaml.safeLoad(file);
     default:
-      console.log('unsupported file type');
-      return null;
+      return 'unsupported file type';
   }
 };
 
