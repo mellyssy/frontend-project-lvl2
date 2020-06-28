@@ -13,10 +13,11 @@ const answer = `{
 + verbose: true
 }`;
 
-test('plain JSON check', () => {
-  expect(gendiff(getFixturePath('before.json'), getFixturePath('after.json'))).toBe(answer);
-});
-
-test('plain YAML check', () => {
-  expect(gendiff(getFixturePath('before.yml'), getFixturePath('after.yml'))).toBe(answer);
+test.each`
+  before           | after           | format
+  ${'before.json'} | ${'after.json'} | ${'json'}
+  ${'before.yml'}  | ${'after.yml'}  | ${'yaml'}
+  ${'before.ini'}  | ${'after.ini'}  | ${'ini'}
+`('plain $format check', ({ before, after }) => {
+  expect(gendiff(getFixturePath(before), getFixturePath(after))).toBe(answer);
 });
