@@ -9,7 +9,7 @@ cli-приложение для поиска отличий в файлах yaml
 Пример использования:
 
 ```
-$ gendiff before.yml after.yml
+$ gendiff filepath1.yml filepath2.yml
 
 {
   host: hexlet.io
