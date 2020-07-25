@@ -12,7 +12,7 @@ const buildDiffTree = (obj1, obj2) => {
 
     if (!_.has(obj2, key)) {
       return [...acc, {
-        type: 'deleted', key, obj1Value: obj1[key], obj2Value: null,
+        type: 'removed', key, obj1Value: obj1[key], obj2Value: null,
       }];
     }
     // предполагаем что ключи есть в двух объектах

@@ -28,7 +28,7 @@ const formatter = (tree) => {
       return [...acc, str];
     }
 
-    if (object.type === 'deleted') {
+    if (object.type === 'removed') {
       if (_.isObject(object.obj1Value)) {
         const objAsTree = objToTree(object.obj1Value);
         const str = `- ${object.key}: `;
