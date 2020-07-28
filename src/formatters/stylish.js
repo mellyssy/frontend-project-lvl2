@@ -11,60 +11,54 @@ const objToTree = (obj) => Object.keys(obj).reduce((acc, objKey) => {
   return [...acc, keyAsObj];
 }, []);
 
+const getLine = (status, key, val) => {
+  if (_.isUndefined(val)) {
+    return `${status} ${key}: `;
+  }
+  return `${status} ${key}: ${val}\n`;
+};
+
 const formatter = (tree) => {
   const list = tree.reduce((acc, object) => {
     if (object.type === 'tree') {
-      const str = `  ${object.key}: `;
-      return [...acc, str, formatter(object.children)];
+      return [...acc, getLine(' ', object.key), formatter(object.children)];
     }
 
     if (object.type === 'unmodified') {
       if (_.isObject(object.obj1Value)) {
         const objAsTree = objToTree(object.obj1Value);
-        const str = `  ${object.key}: `;
-        return [...acc, str, formatter(objAsTree)];
+        return [...acc, getLine(' ', object.key), formatter(objAsTree)];
       }
-      const str = `  ${object.key}: ${object.obj1Value}\n`;
-      return [...acc, str];
+      return [...acc, getLine(' ', object.key, object.obj1Value)];
     }
 
     if (object.type === 'removed') {
       if (_.isObject(object.obj1Value)) {
         const objAsTree = objToTree(object.obj1Value);
-        const str = `- ${object.key}: `;
-        return [...acc, str, formatter(objAsTree)];
+        return [...acc, getLine('-', object.key), formatter(objAsTree)];
       }
-      const str = `- ${object.key}: ${object.obj1Value}\n`;
-      return [...acc, str];
+      return [...acc, getLine('-', object.key, object.obj1Value)];
     }
 
     if (object.type === 'added') {
       if (_.isObject(object.obj2Value)) {
         const objAsTree = objToTree(object.obj2Value);
-        const str = `+ ${object.key}: `;
-        return [...acc, str, formatter(objAsTree)];
+        return [...acc, getLine('+', object.key), formatter(objAsTree)];
       }
-      const str = `+ ${object.key}: ${object.obj2Value}\n`;
-      return [...acc, str];
+      return [...acc, getLine('+', object.key, object.obj2Value)];
     }
 
     if (_.isObjectLike(object.obj2Value)) {
       const objAsTree = objToTree(object.obj2Value);
-      const str1 = `- ${object.key}: ${object.obj1Value}\n`;
-      const str = `  ${object.key}: `;
-      return [...acc, str1, str, formatter(objAsTree)];
+      return [...acc, getLine('-', object.key, object.obj1Value), getLine(' ', object.key), formatter(objAsTree)];
     }
 
     if (_.isObjectLike(object.obj1Value)) {
       const objAsTree = objToTree(object.obj1Value);
-      const str2 = `+ ${object.key}: ${object.obj2Value}\n`;
-      const str = `  ${object.key}: `;
-      return [...acc, str, formatter(objAsTree), str2];
+      return [...acc, getLine(' ', object.key), formatter(objAsTree), getLine('+', object.key, object.obj2Value)];
     }
 
-    const str1 = `- ${object.key}: ${object.obj1Value}\n`;
-    const str2 = `+ ${object.key}: ${object.obj2Value}\n`;
-    return [...acc, str1, str2];
+    return [...acc, getLine('-', object.key, object.obj1Value), getLine('+', object.key, object.obj2Value)];
   }, []);
 
   return list;
@@ -78,11 +72,12 @@ const formatterWithIndents = (list, lvl = 0) => {
     }
     return `${acc}${' '.repeat(lvl + 2)}${line}`;
   }, '{\n');
-  const end = `${' '.repeat(lvl)}}\n`;
+  const statusIndent = 2;
+  const end = !lvl ? `${' '.repeat(lvl)}}\n` : `${' '.repeat(lvl + statusIndent)}}\n`;
   return stringified + end;
 };
 
 
-const stylish = (tree) => formatterWithIndents(formatter(tree));
+const stylish = (tree) => formatterWithIndents(formatter(tree)).trim();
 
 export default stylish;

@@ -5,34 +5,33 @@ const expectedStylish = `{
     - setting3: true
       setting3: {
         key: value
-    }
+      }
       setting6: {
         key: value
       + ops: vops
-    }
+      }
     + follow: false
     + setting4: blah blah
     + setting5: {
         key5: value5
+      }
     }
-  }
     group1: {
     - baz: bas
     + baz: bars
       foo: bar
       nest: {
         key: value
-    }
+      }
     + nest: str
-  }
+    }
   - group2: {
       abc: 12345
-  }
+    }
   + group3: {
       fee: 100500
-  }
-}
-`;
+    }
+}`;
 
 const expectedPlain = `Property 'common.setting2' was removed
 Property 'common.setting3' was updated. From true to [complex value]
@@ -45,4 +44,7 @@ Property 'group1.nest' was updated. From [complex value] to str
 Property 'group2' was removed
 Property 'group3' was added with value: [complex value]`;
 
-export { expectedStylish, expectedPlain };
+
+const expectedJson = '[{"type":"tree","key":"common","children":[{"type":"unmodified","key":"setting1","obj1Value":"Value 1","obj2Value":"Value 1"},{"type":"removed","key":"setting2","obj1Value":200,"obj2Value":null},{"type":"modified","key":"setting3","obj1Value":true,"obj2Value":{"key":"value"}},{"type":"tree","key":"setting6","children":[{"type":"unmodified","key":"key","obj1Value":"value","obj2Value":"value"},{"type":"added","key":"ops","obj1Value":null,"obj2Value":"vops"}]},{"type":"added","key":"follow","obj1Value":null,"obj2Value":false},{"type":"added","key":"setting4","obj1Value":null,"obj2Value":"blah blah"},{"type":"added","key":"setting5","obj1Value":null,"obj2Value":{"key5":"value5"}}]},{"type":"tree","key":"group1","children":[{"type":"modified","key":"baz","obj1Value":"bas","obj2Value":"bars"},{"type":"unmodified","key":"foo","obj1Value":"bar","obj2Value":"bar"},{"type":"modified","key":"nest","obj1Value":{"key":"value"},"obj2Value":"str"}]},{"type":"removed","key":"group2","obj1Value":{"abc":12345},"obj2Value":null},{"type":"added","key":"group3","obj1Value":null,"obj2Value":{"fee":100500}}]';
+
+export { expectedStylish, expectedPlain, expectedJson };
