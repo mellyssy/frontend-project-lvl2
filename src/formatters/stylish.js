@@ -1,83 +1,83 @@
 import _ from 'lodash';
 
 
-const objToTree = (obj) => Object.keys(obj).reduce((acc, objKey) => {
+const getObjAsTree = (obj) => Object.keys(obj).reduce((acc, key) => {
   const keyAsObj = {
     type: 'unmodified',
-    key: objKey,
-    obj1Value: obj[objKey],
+    key,
+    obj1Value: obj[key],
   };
 
   return [...acc, keyAsObj];
 }, []);
 
-const getLine = (status, key, val) => {
-  if (_.isUndefined(val)) {
+const getLine = (status, key, value) => {
+  if (_.isUndefined(value)) {
     return `${status} ${key}: `;
   }
-  return `${status} ${key}: ${val}\n`;
+  return `${status} ${key}: ${value}\n`;
 };
 
-const formatter = (tree) => {
-  const list = tree.reduce((acc, object) => {
+const formatToLines = (tree) => {
+  const lines = tree.reduce((acc, object) => {
     if (object.type === 'tree') {
-      return [...acc, getLine(' ', object.key), formatter(object.children)];
+      return [...acc, getLine(' ', object.key), formatToLines(object.children)];
     }
 
     if (object.type === 'unmodified') {
       if (_.isObject(object.obj1Value)) {
-        const objAsTree = objToTree(object.obj1Value);
-        return [...acc, getLine(' ', object.key), formatter(objAsTree)];
+        const objAsTree = getObjAsTree(object.obj1Value);
+        return [...acc, getLine(' ', object.key), formatToLines(objAsTree)];
       }
       return [...acc, getLine(' ', object.key, object.obj1Value)];
     }
 
     if (object.type === 'removed') {
       if (_.isObject(object.obj1Value)) {
-        const objAsTree = objToTree(object.obj1Value);
-        return [...acc, getLine('-', object.key), formatter(objAsTree)];
+        const objAsTree = getObjAsTree(object.obj1Value);
+        return [...acc, getLine('-', object.key), formatToLines(objAsTree)];
       }
       return [...acc, getLine('-', object.key, object.obj1Value)];
     }
 
     if (object.type === 'added') {
       if (_.isObject(object.obj2Value)) {
-        const objAsTree = objToTree(object.obj2Value);
-        return [...acc, getLine('+', object.key), formatter(objAsTree)];
+        const objAsTree = getObjAsTree(object.obj2Value);
+        return [...acc, getLine('+', object.key), formatToLines(objAsTree)];
       }
       return [...acc, getLine('+', object.key, object.obj2Value)];
     }
 
     if (_.isObjectLike(object.obj2Value)) {
-      const objAsTree = objToTree(object.obj2Value);
-      return [...acc, getLine('-', object.key, object.obj1Value), getLine(' ', object.key), formatter(objAsTree)];
+      const objAsTree = getObjAsTree(object.obj2Value);
+      return [...acc, getLine('-', object.key, object.obj1Value), getLine(' ', object.key), formatToLines(objAsTree)];
     }
 
     if (_.isObjectLike(object.obj1Value)) {
-      const objAsTree = objToTree(object.obj1Value);
-      return [...acc, getLine(' ', object.key), formatter(objAsTree), getLine('+', object.key, object.obj2Value)];
+      const objAsTree = getObjAsTree(object.obj1Value);
+      return [...acc, getLine(' ', object.key), formatToLines(objAsTree), getLine('+', object.key, object.obj2Value)];
     }
 
     return [...acc, getLine('-', object.key, object.obj1Value), getLine('+', object.key, object.obj2Value)];
   }, []);
 
-  return list;
+  return lines;
 };
 
-const formatterWithIndents = (list, lvl = 0) => {
-  const stringified = list.reduce((acc, line) => {
+const formatWithIndents = (lines, lvl = 0) => {
+  const statusIndent = 2;
+  const stringified = lines.reduce((acc, line) => {
     if (Array.isArray(line)) {
-      const innerLine = formatterWithIndents(line, lvl + 2);
+      const innerLine = formatWithIndents(line, lvl + 2);
       return `${acc}${innerLine}`;
     }
-    return `${acc}${' '.repeat(lvl + 2)}${line}`;
+    return `${acc}${' '.repeat(lvl + statusIndent)}${line}`;
   }, '{\n');
-  const statusIndent = 2;
-  const end = !lvl ? `${' '.repeat(lvl)}}\n` : `${' '.repeat(lvl + statusIndent)}}\n`;
-  return stringified + end;
+  const closingBracket = !lvl ? `${' '.repeat(lvl)}}\n` : `${' '.repeat(lvl + statusIndent)}}\n`;
+  return stringified + closingBracket;
 };
 
 
-const stylish = (tree) => formatterWithIndents(formatter(tree)).trim();
+const stylish = (tree) => formatWithIndents(formatToLines(tree)).trim();
 
 export default stylish;
