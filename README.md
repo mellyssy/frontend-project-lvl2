@@ -4,7 +4,7 @@
 
 Учебный проект второго уровня от [Hexlet](https://ru.hexlet.io/professions/frontend/projects/46).
 
-cli-приложение для поиска отличий в файлах yaml, json, ini. Генерация отчёта в форматах: plain text, pretty и json.
+cli-приложение для поиска отличий в файлах yaml, json, ini. Генерация отчёта в форматах: stylish, plain и json.
 
 Пример использования:
 
@@ -20,3 +20,18 @@ $ gendiff filepath1.yml filepath2.yml
 + verbose: true
 }
 ```
+
+Справка:
+
+```
+$ gendiff -h
+```
+
+## Пример работы приложения с файлами .JSON, формат: stylish
+[![asciicast](https://asciinema.org/a/lQmIkwOyCicpm15f6HEsVvmL8.svg)](https://asciinema.org/a/lQmIkwOyCicpm15f6HEsVvmL8)
+
+## Пример работы приложения с файлами .YML, формат: plain
+[![asciicast](https://asciinema.org/a/ggT4mkMIiI5IcDpr29ka4Czyo.svg)](https://asciinema.org/a/ggT4mkMIiI5IcDpr29ka4Czyo)
+
+## Пример работы приложения с файлами .INI, формат: json
+[![asciicast](https://asciinema.org/a/QME4gEXeLulL5iTRw9LHmjLm9.svg)](https://asciinema.org/a/QME4gEXeLulL5iTRw9LHmjLm9)
