@@ -1,6 +1,5 @@
 import _ from 'lodash';
 
-
 const getObjAsTree = (obj) => Object.keys(obj).reduce((acc, key) => {
   const keyAsObj = {
     type: 'unmodified',
@@ -50,12 +49,12 @@ const formatToLines = (tree) => {
 
     if (_.isObjectLike(object.obj2Value)) {
       const objAsTree = getObjAsTree(object.obj2Value);
-      return [...acc, getLine('-', object.key, object.obj1Value), getLine(' ', object.key), formatToLines(objAsTree)];
+      return [...acc, getLine('-', object.key, object.obj1Value), getLine('+', object.key), formatToLines(objAsTree)];
     }
 
     if (_.isObjectLike(object.obj1Value)) {
       const objAsTree = getObjAsTree(object.obj1Value);
-      return [...acc, getLine(' ', object.key), formatToLines(objAsTree), getLine('+', object.key, object.obj2Value)];
+      return [...acc, getLine('-', object.key), formatToLines(objAsTree), getLine('+', object.key, object.obj2Value)];
     }
 
     return [...acc, getLine('-', object.key, object.obj1Value), getLine('+', object.key, object.obj2Value)];
@@ -65,15 +64,14 @@ const formatToLines = (tree) => {
 };
 
 const formatWithIndents = (lines, lvl = 0) => {
-  const statusIndent = 2;
   const stringified = lines.reduce((acc, line) => {
     if (Array.isArray(line)) {
       const innerLine = formatWithIndents(line, lvl + 2);
       return `${acc}${innerLine}`;
     }
-    return `${acc}${' '.repeat(lvl + statusIndent)}${line}`;
+    return `${acc}${'  '.repeat(lvl + 1)}${line}`;
   }, '{\n');
-  const closingBracket = !lvl ? `${' '.repeat(lvl)}}\n` : `${' '.repeat(lvl + statusIndent)}}\n`;
+  const closingBracket = `${'  '.repeat(lvl)}}\n`;
   return stringified + closingBracket;
 };
 
