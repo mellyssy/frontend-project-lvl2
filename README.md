@@ -21,6 +21,13 @@ $ gendiff filepath1.yml filepath2.yml
 }
 ```
 
+Установка:
+
+```
+make install
+make publish
+```
+
 Справка:
 
 ```
