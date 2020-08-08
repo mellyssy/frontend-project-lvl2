@@ -1,8 +1,5 @@
 install:
-	npm install
-
-gendiff:
-	node bin/gendiff.js
+	npm ci
 
 publish:
 	npm publish --dry-run

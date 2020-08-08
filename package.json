@@ -1,8 +1,8 @@
 {
-  "name": "frontend-project-lvl2",
+  "name": "@mellyssy/frontend-project-lvl2",
   "version": "0.0.1",
   "description": "cli-app to find differences between files in json, yaml and ini formats",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
     "test": "npx -n --experimental-vm-modules jest"
   },

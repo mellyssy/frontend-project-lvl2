@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 import command from 'commander';
 import gendiff from '../src/index.js';
 
