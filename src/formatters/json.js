@@ -20,7 +20,6 @@ const makeJsonReady = (tree) => tree.reduce((acc, obj) => {
   return [...acc, getObjWithNums(obj)];
 }, []);
 
-
 const json = (tree) => {
   const jsonReadyTree = makeJsonReady(tree);
   return JSON.stringify(jsonReadyTree);

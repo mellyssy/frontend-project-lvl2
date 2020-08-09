@@ -1,8 +1,20 @@
 import _ from 'lodash';
 
+const makePrintableValue = (v) => {
+  if (_.isObjectLike(v)) {
+    return '[complex value]';
+  }
+
+  if (typeof v === 'string') {
+    return `'${v}'`;
+  }
+
+  return v;
+};
+
 const makeLine = (key, status, value1, value2) => {
-  const printableValue1 = _.isObjectLike(value1) ? '[complex value]' : value1;
-  const printableValue2 = _.isObjectLike(value2) ? '[complex value]' : value2;
+  const printableValue1 = makePrintableValue(value1);
+  const printableValue2 = makePrintableValue(value2);
 
   if (status === 'added') {
     return `Property '${key}' was added with value: ${printableValue2}`;
