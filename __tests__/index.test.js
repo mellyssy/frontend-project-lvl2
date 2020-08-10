@@ -1,10 +1,8 @@
-import { test, expect } from '@jest/globals';
+import { test, expect, beforeAll } from '@jest/globals';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 import path from 'path';
-import gendiff from '../src/index.js';
-import expectedStylish from '../__fixtures__/expectedStylish.js';
-import expectedPlain from '../__fixtures__/expectedPlain.js';
-import expectedJson from '../__fixtures__/expectedJson.js';
+import gendiff from '../index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,14 +10,21 @@ const __dirname = path.dirname(__filename);
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 const fileFormats = ['json', 'yml', 'ini'];
 
-test.each(fileFormats)('stylish %s check', (extension) => {
-  expect(gendiff(getFixturePath(`filepath1.${extension}`), getFixturePath(`filepath2.${extension}`), 'stylish')).toBe(expectedStylish);
+const expected = {};
+beforeAll(() => {
+  ['Json', 'Plain', 'Stylish'].forEach((fn) => {
+    const filepath = getFixturePath(`expected${fn}`);
+    const content = fs.readFileSync(filepath, 'utf8');
+    expected[fn] = content;
+  });
 });
 
-test.each(fileFormats)('plain %s check', (extension) => {
-  expect(gendiff(getFixturePath(`filepath1.${extension}`), getFixturePath(`filepath2.${extension}`), 'plain')).toBe(expectedPlain);
-});
+test.each(fileFormats)('%s check', (format) => {
+  const path1 = getFixturePath(`filepath1.${format}`);
+  const path2 = getFixturePath(`filepath2.${format}`);
 
-test.each(fileFormats)('json %s check', (extension) => {
-  expect(gendiff(getFixturePath(`filepath1.${extension}`), getFixturePath(`filepath2.${extension}`), 'json')).toBe(expectedJson);
+  expect(gendiff(path1, path2)).toBe(expected.Stylish);
+  expect(gendiff(path1, path2, 'stylish')).toBe(expected.Stylish);
+  expect(gendiff(path1, path2, 'plain')).toBe(expected.Plain);
+  expect(gendiff(path1, path2, 'json')).toBe(expected.Json);
 });

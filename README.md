@@ -21,10 +21,18 @@ $ gendiff filepath1.yml filepath2.yml
 }
 ```
 
+Технические требования:
+
+```
+nodejs v14.7.0
+npm v6.14.7
+make v3.81
+```
+
 Установка:
 
 ```
-make install && make publish && make link
+make install && make link
 ```
 
 Справка:

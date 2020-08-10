@@ -35,7 +35,7 @@ const plain = (tree, propName = null) => {
   const lines = tree.reduce((acc, value) => {
     const property = !propName ? value.key : `${propName}.${value.key}`;
 
-    if (value.type === 'tree') {
+    if (value.type === 'nested') {
       return [...acc, plain(value.children, property)];
     }
 

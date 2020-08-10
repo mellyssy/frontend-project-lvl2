@@ -19,7 +19,7 @@ const getLine = (status, key, value) => {
 
 const formatToLines = (tree) => {
   const lines = tree.reduce((acc, object) => {
-    if (object.type === 'tree') {
+    if (object.type === 'nested') {
       return [...acc, getLine(' ', object.key), formatToLines(object.children)];
     }
 
