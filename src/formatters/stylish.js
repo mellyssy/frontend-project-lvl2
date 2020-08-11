@@ -1,67 +1,48 @@
 import _ from 'lodash';
 
-const getObjAsTree = (obj) => Object.keys(obj).reduce((acc, key) => {
-  const keyAsObj = {
-    type: 'unmodified',
-    key,
-    obj1Value: obj[key],
-  };
+const getObjAsTree = (obj) => _.keys(obj).map((key) => ({
+  type: 'unmodified',
+  key,
+  obj1Value: obj[key],
+}));
 
-  return [...acc, keyAsObj];
-}, []);
+const getLine = (status, key, value) => (
+  _.isUndefined(value) ? `${status} ${key}: ` : `${status} ${key}: ${value}\n`);
 
-const getLine = (status, key, value) => {
-  if (_.isUndefined(value)) {
-    return `${status} ${key}: `;
-  }
-  return `${status} ${key}: ${value}\n`;
-};
-
-const formatToLines = (tree) => {
-  const lines = tree.reduce((acc, object) => {
-    if (object.type === 'nested') {
-      return [...acc, getLine(' ', object.key), formatToLines(object.children)];
-    }
-
-    if (object.type === 'unmodified') {
+const formatToLines = (tree) => tree.flatMap((object) => {
+  switch (object.type) {
+    case 'nested':
+      return [getLine(' ', object.key), formatToLines(object.children)];
+    case 'unmodified':
       if (_.isObject(object.obj1Value)) {
         const objAsTree = getObjAsTree(object.obj1Value);
-        return [...acc, getLine(' ', object.key), formatToLines(objAsTree)];
+        return [getLine(' ', object.key), formatToLines(objAsTree)];
       }
-      return [...acc, getLine(' ', object.key, object.obj1Value)];
-    }
-
-    if (object.type === 'removed') {
+      return [getLine(' ', object.key, object.obj1Value)];
+    case 'removed':
       if (_.isObject(object.obj1Value)) {
         const objAsTree = getObjAsTree(object.obj1Value);
-        return [...acc, getLine('-', object.key), formatToLines(objAsTree)];
+        return [getLine('-', object.key), formatToLines(objAsTree)];
       }
-      return [...acc, getLine('-', object.key, object.obj1Value)];
-    }
-
-    if (object.type === 'added') {
+      return [getLine('-', object.key, object.obj1Value)];
+    case 'added':
       if (_.isObject(object.obj2Value)) {
         const objAsTree = getObjAsTree(object.obj2Value);
-        return [...acc, getLine('+', object.key), formatToLines(objAsTree)];
+        return [getLine('+', object.key), formatToLines(objAsTree)];
       }
-      return [...acc, getLine('+', object.key, object.obj2Value)];
-    }
-
-    if (_.isObjectLike(object.obj2Value)) {
-      const objAsTree = getObjAsTree(object.obj2Value);
-      return [...acc, getLine('-', object.key, object.obj1Value), getLine('+', object.key), formatToLines(objAsTree)];
-    }
-
-    if (_.isObjectLike(object.obj1Value)) {
-      const objAsTree = getObjAsTree(object.obj1Value);
-      return [...acc, getLine('-', object.key), formatToLines(objAsTree), getLine('+', object.key, object.obj2Value)];
-    }
-
-    return [...acc, getLine('-', object.key, object.obj1Value), getLine('+', object.key, object.obj2Value)];
-  }, []);
-
-  return lines;
-};
+      return [getLine('+', object.key, object.obj2Value)];
+    default:
+      if (_.isObjectLike(object.obj2Value)) {
+        const objAsTree = getObjAsTree(object.obj2Value);
+        return [getLine('-', object.key, object.obj1Value), getLine('+', object.key), formatToLines(objAsTree)];
+      }
+      if (_.isObjectLike(object.obj1Value)) {
+        const objAsTree = getObjAsTree(object.obj1Value);
+        return [getLine('-', object.key), formatToLines(objAsTree), getLine('+', object.key, object.obj2Value)];
+      }
+      return [getLine('-', object.key, object.obj1Value), getLine('+', object.key, object.obj2Value)];
+  }
+});
 
 const formatWithIndents = (lines, lvl = 0) => {
   const stringified = lines.reduce((acc, line) => {
