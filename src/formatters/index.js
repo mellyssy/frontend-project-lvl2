@@ -8,7 +8,9 @@ export default (tree, format) => {
       return plain(tree);
     case 'json':
       return json(tree);
-    default:
+    case 'stylish':
       return stylish(tree);
+    default:
+      throw new Error(`Unknown format: ${format}`);
   }
 };
