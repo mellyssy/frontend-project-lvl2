@@ -6,33 +6,32 @@ const closingBracket = '}';
 const step = 2;
 
 
-const stringifyObject = (obj, space, lvl) => {
-  const stringified = _.keys(obj).map((key) => {
-    const indent = space.repeat(lvl);
+const stringify = (value, symbol, lvl) => {
+  if (!_.isObjectLike(value)) {
+    return `${value}`;
+  }
+  const iterStringify = (obj, currLevel) => {
+    const indent = symbol.repeat(lvl + currLevel);
+    const lines = _.entries(obj).flatMap(([k, v]) => {
+      if (!_.isObjectLike(v)) {
+        return `${indent}${k}: ${v}`;
+      }
 
-    if (_.isObjectLike(obj[key])) {
-      const recursiveValue = stringifyObject(obj[key], ' ', lvl + step);
-      return `${indent}${key}: ${recursiveValue}`;
-    }
+      const stingifiedObj = iterStringify(v, currLevel + lvl);
+      return [`${indent}${k}: ${stingifiedObj}`];
+    }).join('\n');
+    const closingLine = `${symbol.repeat(currLevel)}}`;
+    return ['{', lines, closingLine].join('\n');
+  };
 
-    return `${indent}${key}: ${obj[key]}`;
-  }).join('\n');
-
-  const bracketIndent = (lvl - step) < 0 ? space.repeat(0) : space.repeat(lvl - step);
-  const closingBracketLine = `${bracketIndent}${closingBracket}`;
-
-  return [openingBracket, stringified, closingBracketLine].join('\n');
+  return iterStringify(value, 0);
 };
 
 const stringifyTree = (tree, level = 1) => {
   const stringified = tree.map((obj) => {
     const indent = indentSymbol.repeat(level);
-    const processedValue1 = _.isObjectLike(obj.obj1Value)
-      ? `${openingBracket}\n${stringifyObject(obj.obj1Value, level + step)}\n${indent}  ${closingBracket}`
-      : `${obj.obj1Value}`;
-    const processedValue2 = _.isObjectLike(obj.obj2Value)
-      ? `${openingBracket}\n${stringifyObject(obj.obj2Value, level + step)}\n${indent}  ${closingBracket}`
-      : `${obj.obj2Value}`;
+    const processedValue1 = stringify(obj.obj1Value, ' ', 2);
+    const processedValue2 = stringify(obj.obj2Value, ' ', 2);
 
     switch (obj.type) {
       case 'unmodified':
