@@ -7,7 +7,7 @@ const stringify = (value) => {
   return _.isString(value) ? `'${value}'` : value;
 };
 
-const plain = (tree, propName = null) => tree.map((value) => {
+const formatPlain = (tree, propName = null) => tree.map((value) => {
   const property = !propName ? value.key : `${propName}.${value.key}`;
 
   const processedValue1 = stringify(value.obj1Value);
@@ -15,7 +15,7 @@ const plain = (tree, propName = null) => tree.map((value) => {
 
   switch (value.type) {
     case 'nested':
-      return plain(value.children, property);
+      return formatPlain(value.children, property);
     case 'unmodified':
       return null;
     case 'added':
@@ -29,4 +29,4 @@ const plain = (tree, propName = null) => tree.map((value) => {
   }
 }).filter((value) => value).join('\n');
 
-export default plain;
+export default formatPlain;
