@@ -12,10 +12,10 @@ const fileFormats = ['json', 'yml', 'ini'];
 
 const expected = {};
 beforeAll(() => {
-  ['Json', 'Plain', 'Stylish'].forEach((fn) => {
-    const filepath = getFixturePath(`expected${fn}`);
+  ['Json', 'Plain', 'Stylish'].forEach((format) => {
+    const filepath = getFixturePath(`expected${format}`);
     const content = fs.readFileSync(filepath, 'utf8');
-    expected[fn] = content;
+    expected[format] = content;
   });
 });
 
